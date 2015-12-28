@@ -6,20 +6,22 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.view.View.OnTouchListener;
 
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 
-public class MainActivity extends Activity implements OnClickListener
+public class MainActivity extends Activity implements OnClickListener, OnLongClickListener, OnTouchListener
 {
 
-	TextView tv1;
-	TextView tvEdad;
-	Button btnEnviar;
+	TextView tv1, tvEdad, tvTocame;
+	Button btnEnviar, btnEnviarLento;
 	EditText et1;
 	String edad = "";
     @Override
@@ -42,11 +44,23 @@ public class MainActivity extends Activity implements OnClickListener
         edad = et1.getText().toString();
         
         //Inicialización del Button
-        btnEnviar = (Button) findViewById(R.id.btnEnviar);
+        btnEnviar = (Button) findViewById(R.id.btnEnviarRapido);
         
         //Agregar Listen al Button 
         btnEnviar.setOnClickListener(this);
         
+        //Inicialización Btn Lento
+        btnEnviarLento = (Button) findViewById(R.id.btnEnviarLento);
+        
+        //Agregar Listen
+        btnEnviarLento.setOnLongClickListener(this);
+        
+        //TouchEvent
+        tvTocame = (TextView) findViewById(R.id.tvT);
+        
+        tvTocame.setTextSize(20);
+        
+        tvTocame.setOnTouchListener(this);
         
     }
 
@@ -79,7 +93,7 @@ public class MainActivity extends Activity implements OnClickListener
         tvEdad = (TextView) findViewById(R.id.tvEdad);
         switch (v.getId())
         {
-		case R.id.btnEnviar:
+		case R.id.btnEnviarRapido:
 			 //Se guarda lo que se escribió en el EditText
 	        edad = et1.getText().toString();
 	        tvEdad.setTextSize(20);
@@ -92,6 +106,46 @@ public class MainActivity extends Activity implements OnClickListener
 		}
        
 		
+	}
+
+	@Override
+	public boolean onLongClick(View v) 
+	{
+		//Muestra la edad
+        tvEdad = (TextView) findViewById(R.id.tvEdad);
+        switch (v.getId())
+        {
+		case R.id.btnEnviarLento:
+			 //Se guarda lo que se escribió en el EditText
+	        edad = et1.getText().toString();
+	        tvEdad.setTextSize(20);
+	        tvEdad.setTextColor(Color.BLACK);
+	        tvEdad.setText("Tú edad es: " + edad);
+			break;
+
+		default:
+			break;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		
+		if(event.getAction() == MotionEvent.ACTION_DOWN)
+		{
+			tvTocame.setText("!Deja de Tocarme!");
+		}
+		if(event.getAction() == MotionEvent.ACTION_MOVE)
+		{
+			tvTocame.setText("!Dejame Quieto!");
+		}
+		if(event.getAction() == MotionEvent.ACTION_UP)
+		{
+			tvTocame.setText("!Por fin me hiciste caso!");
+		}
+			
+		return true;
 	}
 
 
